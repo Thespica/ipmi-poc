@@ -10,7 +10,6 @@ package com.nextian.ipmi.coding;
 
 import com.nextian.ipmi.coding.commands.IpmiCommandCoder;
 import com.nextian.ipmi.coding.protocol.IpmiMessage;
-import com.nextian.ipmi.coding.protocol.decoder.Protocolv15Decoder;
 import com.nextian.ipmi.coding.protocol.decoder.Protocolv20Decoder;
 import com.nextian.ipmi.coding.protocol.encoder.IpmiEncoder;
 import com.nextian.ipmi.coding.rmcp.RmcpEncoder;

@@ -13,7 +13,6 @@ import com.nextian.ipmi.coding.payload.lan.IpmiLanResponse;
 import com.nextian.ipmi.coding.protocol.AuthenticationType;
 import com.nextian.ipmi.coding.protocol.IpmiMessage;
 import com.nextian.ipmi.coding.protocol.decoder.ProtocolDecoder;
-import com.nextian.ipmi.coding.protocol.decoder.Protocolv15Decoder;
 import com.nextian.ipmi.coding.rmcp.RmcpMessage;
 import com.nextian.ipmi.common.TypeConverter;
 import com.nextian.ipmi.sm.StateMachine;
@@ -52,21 +51,21 @@ public class AuthcapWaiting extends State {
         if (ProtocolDecoder.decodeAuthenticationType(message) == AuthenticationType.RMCPPlus) {
             return; // this isn't IPMI v1.5 message so we ignore it
         }
-        Protocolv15Decoder decoder = new Protocolv15Decoder();
-        IpmiMessage ipmiMessage = null;
-        try {
-            ipmiMessage = decoder.decode(message);
-            GetChannelAuthenticationCapabilities capabilities = new GetChannelAuthenticationCapabilities();
-            if (capabilities.isCommandResponse(ipmiMessage)) {
-                IpmiLanResponse ipmiLanResponse = (IpmiLanResponse) ipmiMessage.getPayload();
-                if (TypeConverter.byteToInt(ipmiLanResponse.getSequenceNumber()) == tag) {
-                    stateMachine.doExternalAction(new ResponseAction(ipmiLanResponse.getCompletionCode(),
-                            capabilities.getResponseData(ipmiMessage)));
-                }
-            }
-        } catch (Exception e) {
-            stateMachine.doExternalAction(new ErrorAction(e));
-        }
+//        Protocolv15Decoder decoder = new Protocolv15Decoder();
+//        IpmiMessage ipmiMessage = null;
+//        try {
+//            ipmiMessage = decoder.decode(message);
+//            GetChannelAuthenticationCapabilities capabilities = new GetChannelAuthenticationCapabilities();
+//            if (capabilities.isCommandResponse(ipmiMessage)) {
+//                IpmiLanResponse ipmiLanResponse = (IpmiLanResponse) ipmiMessage.getPayload();
+//                if (TypeConverter.byteToInt(ipmiLanResponse.getSequenceNumber()) == tag) {
+//                    stateMachine.doExternalAction(new ResponseAction(ipmiLanResponse.getCompletionCode(),
+//                            capabilities.getResponseData(ipmiMessage)));
+//                }
+//            }
+//        } catch (Exception e) {
+//            stateMachine.doExternalAction(new ErrorAction(e));
+//        }
     }
 
 }

@@ -21,7 +21,6 @@ import com.nextian.ipmi.coding.payload.lan.IpmiLanResponse;
 import com.nextian.ipmi.coding.payload.lan.NetworkFunction;
 import com.nextian.ipmi.coding.protocol.AuthenticationType;
 import com.nextian.ipmi.coding.protocol.IpmiMessage;
-import com.nextian.ipmi.coding.protocol.Ipmiv15Message;
 import com.nextian.ipmi.coding.protocol.Ipmiv20Message;
 import com.nextian.ipmi.coding.protocol.PayloadType;
 import com.nextian.ipmi.coding.protocol.encoder.Protocolv20Encoder;
@@ -162,42 +161,28 @@ public abstract class IpmiCommandCoder {
      */
     public IpmiMessage encodeCommand(int sequenceNumber, int sessionId)
             throws NoSuchAlgorithmException, InvalidKeyException {
-        if (getIpmiVersion() == IpmiVersion.V15) {
-            Ipmiv15Message message = new Ipmiv15Message();
+        Ipmiv20Message message = new Ipmiv20Message(getCipherSuite().getConfidentialityAlgorithm());
 
-            message.setAuthenticationType(getAuthenticationType());
+        message.setAuthenticationType(getAuthenticationType());
 
-            message.setSessionID(sessionId);
+        message.setSessionID(sessionId);
 
-            message.setSessionSequenceNumber(sequenceNumber);
+        message.setSessionSequenceNumber(sequenceNumber);
 
-            message.setPayload(preparePayload(sequenceNumber));
+        message.setPayloadType(PayloadType.Ipmi);
 
-            return message;
-        } else /* IPMI version 2.0 */ {
-            Ipmiv20Message message = new Ipmiv20Message(getCipherSuite().getConfidentialityAlgorithm());
+        message.setPayloadAuthenticated(getCipherSuite().getIntegrityAlgorithm().getCode() !=
+                SecurityConstants.IA_NONE);
 
-            message.setAuthenticationType(getAuthenticationType());
+        message.setPayloadEncrypted(getCipherSuite().getConfidentialityAlgorithm().getCode() !=
+                SecurityConstants.CA_NONE);
 
-            message.setSessionID(sessionId);
+        message.setPayload(preparePayload(sequenceNumber));
 
-            message.setSessionSequenceNumber(sequenceNumber);
+        message.setAuthCode(getCipherSuite().getIntegrityAlgorithm().generateAuthCode(
+                message.getIntegrityAlgorithmBase(new Protocolv20Encoder())));
 
-            message.setPayloadType(PayloadType.Ipmi);
-
-            message.setPayloadAuthenticated(getCipherSuite().getIntegrityAlgorithm().getCode() !=
-                    SecurityConstants.IA_NONE);
-
-            message.setPayloadEncrypted(getCipherSuite().getConfidentialityAlgorithm().getCode() !=
-                    SecurityConstants.CA_NONE);
-
-            message.setPayload(preparePayload(sequenceNumber));
-
-            message.setAuthCode(getCipherSuite().getIntegrityAlgorithm().generateAuthCode(
-                    message.getIntegrityAlgorithmBase(new Protocolv20Encoder())));
-
-            return message;
-        }
+        return message;
     }
 
     /**

@@ -1,12 +1,17 @@
 /*
- * Copyright (c) Nextian. All rights reserved.
+ * Copyright 2022 Alibaba Group Holding Limited.
  *
- * This software is furnished under a license. Use, duplication,
- * disclosure and all other uses are restricted to the rights
- * specified in the written license agreement.
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
  *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-package com.nextian.ipmi.sample;
+package com.nextian.ipmi;
 
 import com.nextian.ipmi.api.async.ConnectionHandle;
 import com.nextian.ipmi.api.sync.IpmiConnector;
@@ -19,7 +24,7 @@ import com.nextian.ipmi.connection.Connection;
 
 import java.net.InetAddress;
 
-public class SkipAuthCap {
+public class RunGetChassisStatus {
 
     /**
      * Run sample program with provided arguments. If arguments are missing display help message.
@@ -28,7 +33,7 @@ public class SkipAuthCap {
      */
     public static void main(String[] args) {
         if (args.length == 3) {
-            sampleRun(args[0], args[1], args[2]);
+            getChassisStatus(args[0], args[1], args[2]);
         } else {
             System.out.println("Program requires parameters: <IPMI server address> <User name> <Password>");
         }
@@ -41,7 +46,7 @@ public class SkipAuthCap {
      * @param userName IPMI server user name
      * @param password IPMI server password
      */
-    private static void sampleRun(String address, String userName, String password) {
+    private static void getChassisStatus(String address, String userName, String password) {
         IpmiConnector connector = null;
 
         try {

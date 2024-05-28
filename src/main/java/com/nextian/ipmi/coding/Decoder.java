@@ -14,7 +14,6 @@ import com.nextian.ipmi.coding.payload.CompletionCode;
 import com.nextian.ipmi.coding.payload.lan.IPMIException;
 import com.nextian.ipmi.coding.protocol.decoder.IpmiDecoder;
 import com.nextian.ipmi.coding.protocol.decoder.PlainCommandv20Decoder;
-import com.nextian.ipmi.coding.protocol.decoder.Protocolv15Decoder;
 import com.nextian.ipmi.coding.protocol.decoder.Protocolv20Decoder;
 import com.nextian.ipmi.coding.rmcp.RmcpDecoder;
 

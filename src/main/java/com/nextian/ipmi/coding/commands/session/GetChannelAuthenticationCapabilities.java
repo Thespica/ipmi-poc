@@ -21,8 +21,9 @@ import com.nextian.ipmi.coding.payload.lan.IpmiLanResponse;
 import com.nextian.ipmi.coding.payload.lan.NetworkFunction;
 import com.nextian.ipmi.coding.protocol.AuthenticationType;
 import com.nextian.ipmi.coding.protocol.IpmiMessage;
-import com.nextian.ipmi.coding.protocol.Ipmiv15Message;
+import com.nextian.ipmi.coding.protocol.Ipmiv20Message;
 import com.nextian.ipmi.coding.security.CipherSuite;
+import com.nextian.ipmi.coding.security.ConfidentialityNone;
 import com.nextian.ipmi.common.TypeConverter;
 
 import java.security.InvalidKeyException;
@@ -161,27 +162,8 @@ public class GetChannelAuthenticationCapabilities extends IpmiCommandCoder {
     @Override
     public IpmiMessage encodeCommand(int sequenceNumber, int sessionId)
             throws InvalidKeyException, NoSuchAlgorithmException {
-        if (getIpmiVersion() == IpmiVersion.V15) {
-            if (sessionId != 0) {
-                throw new IllegalArgumentException("Session ID must be 0");
-            }
-
-            Ipmiv15Message message = new Ipmiv15Message();
-
-            message.setAuthenticationType(getAuthenticationType());
-
-            message.setSessionSequenceNumber(0);
-
-            message.setSessionID(0);
-
-            message.setPayload(preparePayload(sequenceNumber));
-
-            return message;
-        } else {
             setAuthenticationType(AuthenticationType.RMCPPlus);
-
             return super.encodeCommand(sequenceNumber, sessionId);
-        }
     }
 
     @Override

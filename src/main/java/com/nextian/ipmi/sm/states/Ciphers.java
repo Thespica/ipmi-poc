@@ -11,7 +11,7 @@ package com.nextian.ipmi.sm.states;
 import com.nextian.ipmi.coding.Encoder;
 import com.nextian.ipmi.coding.commands.IpmiVersion;
 import com.nextian.ipmi.coding.commands.session.GetChannelAuthenticationCapabilities;
-import com.nextian.ipmi.coding.protocol.encoder.Protocolv15Encoder;
+import com.nextian.ipmi.coding.protocol.encoder.Protocolv20Encoder;
 import com.nextian.ipmi.coding.rmcp.RmcpMessage;
 import com.nextian.ipmi.coding.security.CipherSuite;
 import com.nextian.ipmi.common.TypeConverter;
@@ -31,12 +31,12 @@ public class Ciphers extends State {
         if (machineEvent instanceof Default) {
             Default event = (Default) machineEvent;
             GetChannelAuthenticationCapabilities authCap = new GetChannelAuthenticationCapabilities(
-                    IpmiVersion.V15, IpmiVersion.V20, event.getCipherSuite(), event.getPrivilegeLevel(),
+                    IpmiVersion.V20, IpmiVersion.V20, event.getCipherSuite(), event.getPrivilegeLevel(),
                     TypeConverter.intToByte(0xe));
             try {
                 stateMachine.setCurrent(new AuthcapWaiting(event.getSequenceNumber()));
                 stateMachine.sendMessage(Encoder.encode(
-                        new Protocolv15Encoder(), authCap, event.getSequenceNumber(), 0));
+                        new Protocolv20Encoder(), authCap, event.getSequenceNumber(), 0));
             } catch (Exception e) {
                 stateMachine.setCurrent(this);
                 stateMachine.doExternalAction(new ErrorAction(e));
